@@ -37,9 +37,7 @@ function requireAuth(req, res, next) {
 }
 
 // Routes
-app.get('/', (res, req) => {
-    res.redirect('/users')
-});
+app.get('/', (res, req) => res.redirect('/users'));
 app.get('/register', (req, res) => res.render('register', { error: null }));
 app.post('/register', async (req, res) => {
     try {
