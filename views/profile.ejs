@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= user.username %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <h2>
+        <%= user.username %>
+    </h2>
+    <p>
+        <%= user.bio %>
+    </p>
+    <a href="/chat/<%= user.username %>">Message</a>
+    <a href="/users">Back</a>
+</body>
+
+</html>

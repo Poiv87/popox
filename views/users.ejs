@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>جست‌وجوی کاربران</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ریست پایه */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', sans-serif;
+            background: #e5e5e5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 48px 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .search-container input:focus {
+            border-color: #0077ff;
+            box-shadow: 0 0 8px rgba(0, 119, 255, 0.2);
+            outline: none;
+        }
+
+        .search-container .fa-search {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            color: #888;
+            transition: color 0.3s;
+        }
+
+        .search-container input:focus+.fa-search {
+            color: #0077ff;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #d6d6d6;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .card span {
+            font-size: 1rem;
+            color: #333;
+            word-break: break-all;
+        }
+
+        #no-users {
+            text-align: center;
+            color: #777;
+            padding: 32px 0;
+        }
+
+        #no-users .fa-user-slash {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">PoPoX</h1>
+        <form class="search-container" method="GET" action="/users">
+            <input type="text" name="q" value="<%= q %>" placeholder="جستجو کن…" autocomplete="off">
+            <i class="fa fa-search"></i>
+        </form>
+
+        <% if (users.length===0) { %>
+            <div id="no-users">
+                <i class="fa fa-user-slash"></i>
+                <p>هیچ کاربری یافت نشد.</p>
+            </div>
+            <% } else { %>
+                <div class="cards">
+                    <% users.forEach(username=> { %>
+                        <div class="card" onclick="window.location.href='/chat/<%= username %>'">
+                            <span>
+                                <%= username %>
+                            </span>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </div>
+</body>
+
+</html>
+
+</html>
