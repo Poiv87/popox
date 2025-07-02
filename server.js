@@ -74,7 +74,7 @@ app.post('/login', async (req, res) => {
 
 // Happy Birthday page
 app.get('/happybirthday', requireAuth, (req, res) => {
-    res.render('happybirthday');
+    res.render('happy');
 });
 
 // Users list and search
