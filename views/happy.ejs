@@ -16,9 +16,10 @@
 
         body {
             background: #ffe6f0;
-            overflow: hidden;
+            overflow-y: auto;
+            /* allow scrolling */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             position: relative;
             user-select: none;
         }
@@ -30,7 +31,7 @@
             font-size: 1.5rem;
             opacity: 0.8;
             animation: fall linear;
-            pointer-events: none;
+            pointer-events: auto;
         }
 
         @keyframes fall {
@@ -51,12 +52,15 @@
             padding: 30px;
             width: 90%;
             max-width: 360px;
+            max-height: 80vh;
+            /* allow box to scroll if content is tall */
+            overflow-y: auto;
             text-align: center;
             box-shadow: 0 0 20px rgba(255, 102, 153, 0.7);
             backdrop-filter: blur(8px);
             opacity: 0;
             animation: pop 0.8s ease-out forwards;
-            pointer-events: none;
+            pointer-events: auto;
         }
 
         @keyframes pop {
@@ -119,11 +123,11 @@
         function type() {
             if (idx < message.length) {
                 typedElem.textContent += message[idx++];
-                setTimeout(type, 120);
+                setTimeout(type, 10);
             }
         }
         document.addEventListener('DOMContentLoaded', type);
-
+        typedElem.scrollIntoView({ block: 'end' });
         // Falling hearts
         function createHeart() {
             const heart = document.createElement('div');
