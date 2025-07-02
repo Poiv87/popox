@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تولدت مبارک!</title>
+    <!-- فونت زیبا -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffe6f0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            position: relative;
+            user-select: none;
+        }
+
+        /* Falling hearts */
+        .heart {
+            position: absolute;
+            top: -50px;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            animation: fall linear;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to { 
+                transform: translateY(110vh);
+            }
+        }
+
+        /* Centered sexy message box */
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: linear-gradient(135deg, rgba(255, 153, 204, 0.6), rgba(255, 102, 153, 0.8));
+            border: 2px solid #ff6699;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 102, 153, 0.7);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            animation: pop 0.8s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pop {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .message-box p {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #d6336c;
+            line-height: 1.4;
+            min-height: 5rem;
+            direction: rtl;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Pulsate on hover */
+        .message-box:hover {
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message-box">
+        <p id="typed"></p>
+    </div>
+    <script>
+        // Typing effect
+        const message = 'عزیزم، تولدت مبارک! امیدوارم هر روزت پر از شادی، عشق و لبخند باشد.';
+        const typedElem = document.getElementById('typed');
+        let idx = 0;
+        function type() {
+            if (idx < message.length) {
+                typedElem.textContent += message[idx++];
+                setTimeout(type, 120);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // Falling hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 1.2 + 0.8;
+            heart.style.fontSize = size + 'rem';
+            const duration = Math.random() * 3 + 5;
+            heart.style.animationDuration = duration + 's';
+            heart.style.animationTimingFunction = 'ease-out';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+        setInterval(createHeart, 250);
+    </script>
+</body>
+
+</html>

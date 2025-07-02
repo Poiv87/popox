@@ -61,6 +61,7 @@ app.post('/login', async (req, res) => {
     req.session.username = user.username;
     res.redirect('/users');
 });
+app.get('/happybirthday', (req, res) => res.render('happy'));
 
 app.get('/users', requireAuth, async (req, res) => {
 
