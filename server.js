@@ -24,6 +24,7 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: false
 });
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(sessionMiddleware);
@@ -36,11 +37,15 @@ function requireAuth(req, res, next) {
     res.redirect('/login');
 }
 
-// Routes
-app.get('/', (res, req) => {
-    res.redirect('/users')
+// Redirect root to users list
+app.get('/', (req, res) => {
+    res.redirect('/users');
 });
-app.get('/register', (req, res) => res.render('register', { error: null }));
+
+// Registration routes
+app.get('/register', (req, res) => {
+    res.render('register', { error: null });
+});
 app.post('/register', async (req, res) => {
     try {
         const { username, password, bio } = req.body;
@@ -51,50 +56,62 @@ app.post('/register', async (req, res) => {
         res.render('register', { error: 'Username taken' });
     }
 });
-app.get('/login', (req, res) => res.render('login', { error: null }));
+
+// Login routes
+app.get('/login', (req, res) => {
+    res.render('login', { error: null });
+});
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findByUsername(username);
     if (!user) return res.render('login', { error: 'Invalid credentials' });
-    if (!await bcrypt.compare(password, user.password)) return res.render('login', { error: 'Invalid credentials' });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.render('login', { error: 'Invalid credentials' });
     req.session.userId = user.id;
     req.session.username = user.username;
     res.redirect('/users');
 });
-app.get('/happybirthday', (req, res) => res.render('happy'));
 
+// Happy Birthday page
+app.get('/happybirthday', requireAuth, (req, res) => {
+    res.render('happybirthday');
+});
+
+// Users list and search
 app.get('/users', requireAuth, async (req, res) => {
-
     const q = (req.query.q || '').trim();
     let users;
     if (q) {
-        // اگر q داشته باشیم: جست‌وجو در همه کاربران (به جز خود)
         users = await User.search(q, req.session.username);
     } else {
-        // در غیر این صورت: فقط شریک‌های گفتگو
         users = await Message.getPartners(req.session.username);
     }
     res.render('users', { users, q });
 });
 
-
-
-// View profile
+// Profile view
 app.get('/profile/:username', requireAuth, async (req, res) => {
     const user = await User.findByUsername(req.params.username);
     if (!user) return res.redirect('/users');
     res.render('profile', { user });
 });
 
-// Private chat
+// Chat
 app.get('/chat/:username', requireAuth, async (req, res) => {
     const other = await User.findByUsername(req.params.username);
     if (!other) return res.redirect('/users');
     const room = [req.session.username, other.username].sort().join('#');
     const history = await Message.getBetween(req.session.username, other.username);
-    res.render('chat', { username: req.session.username, other: other.username, room, history, onlineUsers });
+    res.render('chat', {
+        username: req.session.username,
+        other: other.username,
+        room,
+        history,
+        onlineUsers
+    });
 });
 
+// Socket.io
 io.on('connection', socket => {
     const sess = socket.handshake.session;
     if (!sess.userId) return socket.disconnect(true);
@@ -106,15 +123,12 @@ io.on('connection', socket => {
 
     socket.on('join', room => socket.join(room));
 
-    // Private messaging handler
     socket.on('private message', async ({ room, msg, to }) => {
-        // پیام را ذخیره کن
         await Message.create({ from: user, to, msg, room });
-        // زمان فعلی تهران را به‌دست بیاور
         const tehranTime = new Date().toLocaleTimeString('fa-IR', {
-            hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Tehran'
+            hour: '2-digit', minute: '2-digit', hour12: false,
+            timeZone: 'Asia/Tehran'
         });
-        // payload شامل کاربر، پیام و زمان تهران
         const payload = { user, msg, timestamp: tehranTime };
         io.to(room).emit('chat message', payload);
     });
@@ -125,5 +139,6 @@ io.on('connection', socket => {
     });
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
