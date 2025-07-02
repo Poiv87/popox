@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -42,7 +43,7 @@
 
         /* Centered sexy message box */
         .message-box {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
@@ -127,7 +128,7 @@
             }
         }
         document.addEventListener('DOMContentLoaded', type);
-        typedElem.scrollIntoView({ block: 'end' });
+
         // Falling hearts
         function createHeart() {
             const heart = document.createElement('div');
