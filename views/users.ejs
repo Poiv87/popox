@@ -7,6 +7,35 @@
     <title>جست‌وجوی کاربران</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* متغیرهای CSS برای حالت روشن و تاریک */
+        :root {
+            --bg-color: #e5e5e5;
+            --container-bg: #fff;
+            --title-color: #333;
+            --input-bg: #fff;
+            --input-border: #ddd;
+            --input-text: #000;
+            --search-icon: #888;
+            --card-bg-start: #248aff;
+            --card-bg-end: #723fff;
+            --card-text: #fff;
+            --no-users-text: #777;
+        }
+
+        .dark {
+            --bg-color: #1a1a1a;
+            --container-bg: #2a2a2a;
+            --title-color: #e5e5e5;
+            --input-bg: #2a2a2a;
+            --input-border: #444;
+            --input-text: #e5e5e5;
+            --search-icon: #aaa;
+            --card-bg-start: #555;
+            --card-bg-end: #333;
+            --card-text: #e5e5e5;
+            --no-users-text: #bbb;
+        }
+
         /* ریست پایه */
         * {
             margin: 0;
@@ -16,26 +45,41 @@
 
         body {
             font-family: 'Vazir', sans-serif;
-            background: #e5e5e5;
-            height: 100vh;
+            background: var(--bg-color);
+            color: var(--input-text);
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s, color 0.3s;
         }
 
         .container {
             width: 100%;
             max-width: 600px;
-            background: #fff;
+            background: var(--container-bg);
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             padding: 24px;
+            position: relative;
         }
 
         .title {
             text-align: center;
             font-size: 2rem;
             margin-bottom: 16px;
-            color: #333;
+            color: var(--title-color);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            background: none;
+            border: none;
+            color: var(--search-icon);
+            font-size: 1.25rem;
+            cursor: pointer;
         }
 
         .search-container {
@@ -46,9 +90,11 @@
         .search-container input {
             width: 100%;
             padding: 12px 48px 12px 16px;
-            border: 2px solid #ddd;
+            border: 2px solid var(--input-border);
             border-radius: 50px;
             font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--input-text);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
@@ -61,9 +107,9 @@
         .search-container .fa-search {
             position: absolute;
             top: 50%;
-            left: 16px;
+            right: 16px;
             transform: translateY(-50%);
-            color: #888;
+            color: var(--search-icon);
             transition: color 0.3s;
         }
 
@@ -78,14 +124,13 @@
         }
 
         .card {
-            background: #d6d6d6;
+            background: linear-gradient(90deg, var(--card-bg-start), var(--card-bg-end));
             border-radius: 12px;
             padding: 16px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 2px 4px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
-            position: relative;
             overflow: hidden;
         }
 
@@ -95,14 +140,15 @@
         }
 
         .card span {
+            font-family: Georgia, 'Times New Roman', Times, serif;
             font-size: 1rem;
-            color: #333;
+            color: var(--card-text);
             word-break: break-all;
         }
 
         #no-users {
             text-align: center;
-            color: #777;
+            color: var(--no-users-text);
             padding: 32px 0;
         }
 
@@ -115,6 +161,9 @@
 
 <body>
     <div class="container">
+        <button class="toggle-btn" onclick="document.body.classList.toggle('dark')" title="تغییر حالت">
+            <i class="fa fa-moon"></i>
+        </button>
         <h1 class="title">PoPoX</h1>
         <form class="search-container" method="GET" action="/users">
             <input type="text" name="q" value="<%= q %>" placeholder="جستجو کن…" autocomplete="off">
@@ -139,7 +188,5 @@
                 <% } %>
     </div>
 </body>
-
-</html>
 
 </html>

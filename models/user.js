@@ -12,10 +12,7 @@ class User {
         });
     }
 
-    /**
-     * پیدا کردن کاربر بر اساس نام‌کاربری (برای ورود و بارگذاری پروفایل)
-     * حتماً باید password هم برگردد تا bcrypt.compare کار کند.
-     */
+    
     static findByUsername(username) {
         return new Promise((res, rej) => {
             db.get(
